@@ -578,11 +578,24 @@ export abstract class RichRemoteProvider extends RemoteProvider {
 			return undefined;
 		}
 
-		let session;
+		let session: AuthenticationSession | undefined | null;
 		try {
-			session = await authentication.getSession(this.authProvider.id, this.authProvider.scopes, {
-				createIfNone: createIfNeeded,
-			});
+			//TODO: Remove 'if' block when VSCode auth provider api can work with personal tokens or 'gitlab'
+			if (this.authProvider.id === 'gitlab') {
+				session = (await (await Container.gitlab)?.authService.askForToken().then((token: string | void) => ({
+					id: 'gitlab',
+					accessToken: token,
+					account: {
+						id: '',
+						label: '',
+					},
+					scopes: ['repo'],
+				}))) as AuthenticationSession;
+			} else {
+				session = await authentication.getSession(this.authProvider.id, this.authProvider.scopes, {
+					createIfNone: createIfNeeded,
+				});
+			}
 		} catch (ex) {
 			await Container.context.workspaceState.update(this.connectedKey, undefined);
 
