@@ -1,3 +1,6 @@
+'use strict';
+import * as fs from 'fs';
+import * as paths from 'path';
 import { Uri } from 'vscode';
 import { decodeUtf8Hex, encodeUtf8Hex } from '@env/hex';
 import { UriComparer } from '../comparers';
@@ -256,6 +259,16 @@ export class GitUri extends (Uri as any as UriEx) {
 	})
 	static async fromUri(uri: Uri): Promise<GitUri> {
 		if (GitUri.is(uri)) return uri;
+
+		const uriPath = uri.fsPath;
+		const realPath = fs.realpathSync(uriPath);
+		if (uriPath !== realPath) {
+			// If we got here, it means the original URI is to a symbolic link, so we create a new one using the real location.
+			const newUri = Uri.file(realPath);
+
+			return this.fromUri(newUri);
+		}
+
 		if (!Container.instance.git.isTrackable(uri)) return new GitUri(uri);
 		if (uri.scheme === Schemes.GitLens) return new GitUri(uri);
 
