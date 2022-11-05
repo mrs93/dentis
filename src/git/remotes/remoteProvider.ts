@@ -153,6 +153,8 @@ export abstract class RemoteProvider<T extends RepositoryDescriptor = Repository
 
 	protected abstract getUrlForCommit(sha: string): string;
 
+	getUrlForAvatar?(email: string, size: number): string | undefined;
+
 	protected getUrlForComparison?(base: string, compare: string, notation: '..' | '...'): string | undefined;
 
 	protected getUrlForCreatePullRequest?(
