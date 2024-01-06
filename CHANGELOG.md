@@ -10,6 +10,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/) and this p
 
 - Adds a _Create New Branch..._ option to the _Git Switch to..._ command to easily create a new branch to switch to &mdash; closes [#3138](https://github.com/gitkraken/vscode-gitlens/issues/3138)
 
+### Fixed
+
+- Fixes [#3090](https://github.com/gitkraken/vscode-gitlens/issues/3090) - Manually created empty bare clone repositories in a trusted directory crash worktree view since LocalGitProvider.findRepositoryUri returns just ".git" *and* Fixes [#2575](https://github.com/gitkraken/vscode-gitlens/issues/2575) - Existing worktrees recognized, but incorrectly organized &mdash; thanks to [PR #3092](https://github.com/gitkraken/vscode-gitlens/pull/3092)
+
 ## [14.8.0] - 2024-02-08
 
 ### Added
